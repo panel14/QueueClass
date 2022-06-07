@@ -22,8 +22,8 @@ public class Producer implements Runnable {
             //Если из очереди был взят товар -> увеличиваем его значение на 1
             if (queue.getIsTaken()) product++;
             //Кладём товар в очередь
-            queue.put(product);
             try {
+                queue.put(product);
                 //Ненадолго останавливаем текущий поток
                 Thread.sleep(1000);
                 System.out.println("Producer put a product.");

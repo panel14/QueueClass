@@ -43,7 +43,7 @@ public class CycleQueue implements Queue {
     }
 
     @Override
-    public void put(int val) {
+    public void put(int val) throws InterruptedException {
         //Блокируем метод для других потоков
         lock.lock();
         try {
@@ -63,9 +63,6 @@ public class CycleQueue implements Queue {
 
             //Убираем флаг - товар не брали (а положили в очередь)
             isTaken = false;
-
-        } catch (InterruptedException e) {
-            System.out.println("producer await.");
         } finally {
             // В любом случае в конце снимаем блокировку (чтобы не было дедлока)
             lock.unlock();
@@ -73,7 +70,7 @@ public class CycleQueue implements Queue {
     }
 
     @Override
-    public int get() {
+    public int get() throws InterruptedException {
         //Блокируем метод для других потоков
         lock.lock();
         try {
@@ -92,19 +89,16 @@ public class CycleQueue implements Queue {
             isTaken = true;
             return values[start];
 
-        } catch (InterruptedException e) {
-            System.out.println("Debug: consumer await.");
         } finally {
             // В любом случае в конце снимаем блокировку (чтобы не было дедлока)
             lock.unlock();
         }
-        return -1;
     }
 
     //Метод проверки очередь на заполненность
     @Override
     public boolean full() {
-        return nextPosition(end + 1) == start;
+        return nextPosition(nextPosition(end)) == start;
     }
 
     //Проверка на пустоту
@@ -133,6 +127,7 @@ public class CycleQueue implements Queue {
         return SIZE;
     }
 
+    //Возвращает флаг, было ли что-то взято со склада (для производителя)
     public boolean getIsTaken() {
         return isTaken;
     }
