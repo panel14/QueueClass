@@ -14,13 +14,16 @@ public class Consumer implements Runnable {
 
     @Override
     public void run() {
-        for (int i = 0; i < queue.getSIZE(); i++) {
+        while (true) {
+            int count = (int)(Math.random() * (10 - 1)) + 1;
             try {
+                for (int i = 0; i < count; i++) {
+                    //Берём товар из очереди
+                    queue.get();
+                    System.out.println(Thread.currentThread().getName() + "take product.");
+                }
                 //Ненадолго останавливаем текущий поток
-                Thread.sleep(3000);
-                //Берём товар из очереди
-                queue.get();
-                System.out.println(Thread.currentThread().getName() + "take product.");
+                Thread.sleep(100);
             } catch (InterruptedException e) {
                 System.out.println("Consumer is end.");
             }

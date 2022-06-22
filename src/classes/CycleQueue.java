@@ -109,6 +109,8 @@ public class CycleQueue implements Queue {
 
     //Метод, выводит заполненную часть очереди на экран
     private void log() {
+        lock.lock();
+
         System.out.println("Queue State: ");
         int sPoint = start;
         int ePoint = end;
@@ -122,6 +124,8 @@ public class CycleQueue implements Queue {
             sPoint = nextPosition(sPoint);
         }
         System.out.println();
+
+        lock.unlock();
     }
     public int getSIZE() {
         return SIZE;

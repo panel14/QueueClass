@@ -18,14 +18,12 @@ public class Producer implements Runnable {
 
     @Override
     public void run() {
-        for (int i = 0; i < queue.getSIZE(); i++) {
+        while (true) {
             //Если из очереди был взят товар -> увеличиваем его значение на 1
             if (queue.getIsTaken()) product++;
             //Кладём товар в очередь
             try {
                 queue.put(product);
-                //Ненадолго останавливаем текущий поток
-                Thread.sleep(1000);
                 System.out.println("Producer put a product.");
             } catch (InterruptedException e) {
                 System.out.println("Producer is end.");
